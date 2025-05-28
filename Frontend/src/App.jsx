@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import CodeReview from './pages/CodeReview';
 import ProtectedRoute from './pages/ProtectedRoute';
-import { useState, useEffect } from 'react'
-import "prismjs/themes/prism-tomorrow.css"
+import Profile from './pages/Profile';
+import "prismjs/themes/prism-tomorrow.css";
 import "highlight.js/styles/github-dark.css";
-import rehypeHighlight from "rehype-highlight"
-import Editor from "react-simple-code-editor"
-import prism from "prismjs"
-import Markdown from "react-markdown"
-import axios from 'axios'
-import './App.css'
+import rehypeHighlight from "rehype-highlight";
+import Editor from "react-simple-code-editor";
+import prism from "prismjs";
+import Markdown from "react-markdown";
+import axios from 'axios';
+import './App.css';
 import { ThemeProvider } from './context/ThemeContext';
 import ThemeToggle from './components/ThemeToggle';
 import Dashboard from './pages/Dashboard';
@@ -50,7 +50,7 @@ async function reviewCode(){
     <ThemeProvider>
       <ProjectProvider>
         <BookmarkProvider>
-          <Router>
+          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ThemeToggle />
             <Routes>
               {/* Redirect root to login */}
@@ -60,12 +60,20 @@ async function reviewCode(){
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               
-              {/* Protected route */}
+              {/* Protected routes */}
               <Route 
                 path="/code-review" 
                 element={
                   <ProtectedRoute>
                     <CodeReview />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/profile" 
+                element={
+                  <ProtectedRoute>
+                    <Profile />
                   </ProtectedRoute>
                 } 
               />
