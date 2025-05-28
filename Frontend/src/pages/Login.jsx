@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import config from '../config';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,26 +24,53 @@ const Login = () => {
     setError('');
     setLoading(true);
 
+    // Clear any existing tokens
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+
     try {
-      const response = await axios.post('http://localhost:5000/api/login', formData, {
-        withCredentials: true,
+      const response = await axios.post(`${config.API_URL}/api/auth/login`, formData, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       });
 
       const data = response.data;
 
-      // Store user data in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('userId', data.userId);
-      localStorage.setItem('username', data.username);
-      localStorage.setItem('email', data.email);
+      if (data.token) {
+        // Store user data in localStorage
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.userId);
+        localStorage.setItem('username', data.username);
+        localStorage.setItem('email', data.email);
 
-      // Redirect to code review page
-      navigate('/dashboard');
+        // Redirect to dashboard
+        navigate('/dashboard');
+      } else {
+        setError('Invalid response from server');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || 'An error occurred during login');
+      console.error('Login error:', err);
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        if (err.response.status === 500) {
+          setError('Server error. Please try again later.');
+        } else if (err.response.status === 401) {
+          setError('Invalid email or password.');
+        } else {
+          setError(err.response.data?.message || 'Login failed. Please try again.');
+        }
+      } else if (err.request) {
+        // The request was made but no response was received
+        setError('No response from server. Please check your internet connection.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError('An error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
