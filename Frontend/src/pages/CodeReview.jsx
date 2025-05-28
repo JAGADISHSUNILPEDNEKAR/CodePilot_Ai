@@ -4,10 +4,12 @@ import prism from "prismjs";
 import Markdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import axios from 'axios';
+import config from '../config';
 import "prismjs/themes/prism-tomorrow.css";
 import "highlight.js/styles/github-dark.css";
 import { useProjects } from '../context/ProjectContext';
 import { useLocation } from 'react-router-dom';
+import Chat from '../components/Chat';
 
 const CodeReview = () => {
   const location = useLocation();
@@ -28,7 +30,7 @@ const CodeReview = () => {
     setLoading(true);
     setReview('');
     try {
-      const response = await axios.post("http://localhost:5000/ai/get-review", { code });
+      const response = await axios.post(`${config.API_URL}/ai/get-review`, { code });
       setReview(response.data);
     } catch (err) {
       setReview("Error fetching review. Please try again.");
@@ -43,13 +45,11 @@ const CodeReview = () => {
     if (!language) return;
     const healthScore = project?.healthScore || Math.floor(Math.random() * 41) + 60; // 60-100 random for demo
     addProject({
-      id: Date.now(),
       name,
       language,
-      healthScore,
-      updated: 'just now',
       code,
-      review
+      review,
+      healthScore
     });
     alert('Project added to dashboard!');
   };
@@ -100,6 +100,7 @@ const CodeReview = () => {
               <Markdown rehypePlugins={[rehypeHighlight]}>
                 {review}
               </Markdown>
+              {review && <Chat projectId={project?.id || 'default'} />}
             </div>
           )}
         </div>
