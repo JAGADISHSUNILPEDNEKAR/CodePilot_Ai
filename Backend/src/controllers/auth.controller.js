@@ -74,5 +74,4 @@ exports.profile = async (req, res) => {
     res.status(500).json({ message: 'Error fetching user profile', error: error.message });
   }
 };
-// TODO: implement controller logic
-// ai.controller implementation coming soon
+
