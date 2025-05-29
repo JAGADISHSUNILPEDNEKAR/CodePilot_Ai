@@ -4,11 +4,13 @@ const NewProjectModal = ({ onClose, onAdd }) => {
   const [name, setName] = useState('');
   const [language, setLanguage] = useState('JavaScript');
   const [healthScore, setHealthScore] = useState(80);
+  const [code, setCode] = useState('');
+  const [review, setReview] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name) return;
-    onAdd({ name, language, healthScore, updated: 'just now' });
+    if (!name || !language) return;
+    onAdd({ name, language, code, review, healthScore });
   };
 
   return (
@@ -27,6 +29,10 @@ const NewProjectModal = ({ onClose, onAdd }) => {
           </select>
           <label>Health Score</label>
           <input type="number" min="0" max="100" value={healthScore} onChange={e => setHealthScore(Number(e.target.value))} required />
+          <label>Code</label>
+          <textarea value={code} onChange={e => setCode(e.target.value)} required />
+          <label>Review (optional)</label>
+          <textarea value={review} onChange={e => setReview(e.target.value)} />
           <div className="modal-actions">
             <button type="submit">Add Project</button>
             <button type="button" onClick={onClose}>Cancel</button>
