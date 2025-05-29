@@ -1,3 +1,5 @@
+frontend-src-components-sidebar.jsx
+
 import React from 'react';
 import { FaClock, FaBookmark } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
