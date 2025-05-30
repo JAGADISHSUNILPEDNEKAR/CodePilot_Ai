@@ -7,13 +7,14 @@ const commentSchema = new mongoose.Schema({
     required: true
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true
   },
   text: {
     type: String,
-    required: true
+    required: true,
+    trim: true,
+    minlength: 1
   },
   createdAt: {
     type: Date,

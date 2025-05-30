@@ -1,5 +1,3 @@
-// AI Controller logic goes here
-
 const aiService=require('../services/ai.service');
 
 module.exports.getReview=async(req,res)=>{
@@ -12,8 +10,4 @@ module.exports.getReview=async(req,res)=>{
     const response=await aiService(code);
 
     res.send(response);
-
 }
-// TEST CHANGE: This comment should show up in git diff
-
-
