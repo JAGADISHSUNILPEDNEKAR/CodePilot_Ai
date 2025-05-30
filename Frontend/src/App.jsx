@@ -20,71 +20,98 @@ import { ProjectProvider } from './context/ProjectContext';
 import { BookmarkProvider } from './context/BookmarkContext';
 import Bookmarks from './pages/Bookmarks';
 
-const App = () => {
+/**
+ * App component: the main entry point of the application
+ */
+export default function App() {
+  // State to store the count (not used in this example)
   const [count, setCount] = useState(0);
 
-  const [code,setCode]=useState(`function sum(){ 
+  // State to store the code (not used in this example)
+  const [code, setCode] = useState(`function sum(){ 
   return 1+1
-}`)
+}`);
 
-const [review,setReview]=useState(``);
-const [loading, setLoading] = useState(false);
+  // State to store the review (not used in this example)
+  const [review, setReview] = useState('');
 
- useEffect(() => {
-  prism.highlightAll();
- })
+  // State to store the loading state (not used in this example)
+  const [loading, setLoading] = useState(false);
 
-async function reviewCode(){
-  setLoading(true); 
-  setReview("");    
-  try {
-    const response=await axios.post("http://localhost:5000/ai/get-review",{code});
-    setReview(response.data);
-  } catch (err) {
-    setReview("Error fetching review.");
+  /**
+   * Effect hook to highlight code on mount
+   */
+  useEffect(() => {
+    prism.highlightAll();
+  }, []);
+
+  /**
+   * Function to review code (not used in this example)
+   */
+  async function reviewCode() {
+    setLoading(true);
+    setReview("");
+    try {
+      const response = await axios.post("http://localhost:5000/ai/get-review", { code });
+      setReview(response.data);
+    } catch (err) {
+      setReview("Error fetching review.");
+    }
+    setLoading(false);
   }
-  setLoading(false);
-}
 
   return (
+    // Render the theme provider and router
     <ThemeProvider>
       <ProjectProvider>
         <BookmarkProvider>
-          <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <Router>
             <ThemeToggle />
             <Routes>
               {/* Redirect root to login */}
               <Route path="/" element={<Navigate to="/login" replace />} />
-              
+
               {/* Auth routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              
+
               {/* Protected routes */}
-              <Route 
-                path="/code-review" 
+              <Route
+                path="/code-review"
                 element={
                   <ProtectedRoute>
                     <CodeReview />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/profile" 
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/bookmarks"
+                element={
+                  <ProtectedRoute>
+                    <Bookmarks />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
                 element={
                   <ProtectedRoute>
                     <Profile />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/bookmarks" element={<Bookmarks />} />
             </Routes>
           </Router>
         </BookmarkProvider>
       </ProjectProvider>
     </ThemeProvider>
   );
-};
-
-export default App
+}
