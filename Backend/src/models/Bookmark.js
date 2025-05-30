@@ -17,7 +17,7 @@ const bookmarkSchema = new mongoose.Schema({
   }
 });
 
-// Create a compound index to ensure a user can't bookmark the same project twice
+// Create a compound index to ensure a user can't bookmark the same project twic
 bookmarkSchema.index({ user: 1, project: 1 }, { unique: true });
 
 module.exports = mongoose.model('Bookmark', bookmarkSchema); 
