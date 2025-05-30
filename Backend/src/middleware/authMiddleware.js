@@ -17,4 +17,3 @@ const authMiddleware = (req, res, next) => {
 
 module.exports = authMiddleware;
 
-// TODO: implement controller logic
