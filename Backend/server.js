@@ -29,7 +29,6 @@ app.use('/ai', require('./src/routes/ai.routes'));
 app.use('/api/auth', require('./src/routes/auth.routes'));
 app.use('/api/projects', require('./src/routes/project.routes'));
 app.use('/api/comments', require('./src/routes/comment.routes'));
-app.use('/api/messages', require('./src/routes/message.routes'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
