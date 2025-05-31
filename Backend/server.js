@@ -2,6 +2,14 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { app, server } = require('./src/app');
 
+// Debug middleware
+// ... existing code ...
+//   console.log('Incoming request:', {
+// ... existing code ...
+//     headers: req.headers
+// ... existing code ...
+//   });
+// ... existing code ...
 
 // Routes
 app.use('/ai', require('./src/routes/ai.routes'));
